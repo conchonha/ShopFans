@@ -1,3 +1,8 @@
+<?php 
+    session_start(); //làm việc với session
+    include 'handling/utils/connect.php'; 
+    //lấy tất cả văn bản / mã / đánh dấu tồn tại trong tệp được chỉ định và sao chép nó vào tệp sử dụng câu lệnh
+?>
 <!doctype html>
 <html class="no-js" lang="en">
 
@@ -147,7 +152,7 @@
     </div>
     <!--End Header Top area -->
     <!--Start Main Menu area -->
-    <div class="header_botttom_area bg">
+   <div class="header_botttom_area bg">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
@@ -162,14 +167,15 @@
                                 <div class="mega_menu_list">
                                     <div class="single_megamenu">
                                         <div class="items_list">
-                                            <a href="product.php"><i class="fa fa-angle-right"></i> Ceiling Fans</a>
-                                            <a href="product1.php"><i class="fa fa-angle-right"></i> Tower Fans</a>
-                                            <a href="product2.php"><i class="fa fa-angle-right"></i> Misting Fans</a>
-                                            <a href="product3.php"><i class="fa fa-angle-right"></i> Steam Fans</a>
-                                            <a href="product4.php"><i class="fa fa-angle-right"></i> Stand Fans</a>
-                                            <a href="product5.php"><i class="fa fa-angle-right"></i> Wall Fans</a>
-                                            <a href="product6.php"><i class="fa fa-angle-right"></i> Box Fans</a>
-                                            <a href="product7.php"><i class="fa fa-angle-right"></i> Exhaust Fan</a>
+                          <!-----------------  -- --------------ĐỔ DỮ LIỆU  MENU SHOP-------------------------------->
+                                            <?php  
+                                                $sql = 'SELECT * FROM `category`'; //query select
+                                                $data = mysqli_query($conn,$sql); //thuc thi query
+                                                while ($row = mysqli_fetch_assoc($data)) { // lap du lieu
+                                                ?>
+                                            <a href="shop.php?id_category=<?php echo $row['id_category'] ?>"><i class="fa fa-angle-right"></i> <?php echo $row['name'] ?></a>
+                                            <?php } ?>
+                <!-- -------------------------------END MENU------------------------------------------ -->   
                                         </div>
                                     </div>
                                 </div>
@@ -218,14 +224,24 @@
                     <div class="catagory_area">
                         <h2>category</h2>
                         <ul class="catagory">
-                            <li><a href="#"><i class="fa fa-angle-right"></i>ceiling fans</a> <span>(12)</span></li>
-                            <li><a href="#"><i class="fa fa-angle-right"></i>tower fans</a><span>(6)</span></li>
-                            <li><a href="#"><i class="fa fa-angle-right"></i>misting fans</a><span>(6)</span></li>
-                            <li><a href="#"><i class="fa fa-angle-right"></i>steam fans</a><span>(3)</span></li>
-                            <li><a href="#"><i class="fa fa-angle-right"></i>stand fans</a><span>(6)</span></li>
-                            <li><a href="#"><i class="fa fa-angle-right"></i>wall fans</a><span>(3)</span></li>
-                            <li><a href="#"><i class="fa fa-angle-right"></i>box fans</a><span>(3)</span></li>
-                            <li><a href="#"><i class="fa fa-angle-right"></i>exhaust fans</a><span>(2)</span></li>
+                 <!-----------------  -- --------------ĐỔ DỮ LIỆU  MENU CATEGORY-------------------------------->
+                            <?php  
+                            //query select
+                                $sql = 'SELECT * FROM `category`';
+                                $data = mysqli_query($conn,$sql); //thực thi query
+                                while ($row = mysqli_fetch_assoc($data)) { // lặp dữ liệu
+                                ?>
+                                <li><a href="shop.php?id_category=<?php echo $row['id_category'] ?>"><i class="fa fa-angle-right"></i><?php echo $row['name'] ?></a> 
+                                    <span>
+                                    <?php 
+                                        //query select ( đếm số luong sp co trong catrgory)
+                                        $sql = 'SELECT * FROM `product` WHERE `id_category` = '.$row['id_category'];
+                                        $query = mysqli_query($conn,$sql);
+                                        echo '('.mysqli_num_rows($query).')';
+                                     ?>
+                                </span></li>
+                            <?php } ?>
+                <!-- -------------------------------END MENU------------------------------------------ -->  
                         </ul>
                     </div>
                     <div class="priceing_area">
@@ -241,26 +257,42 @@
                         </div>
                     </div>
                     <div class="catagory_area">
-                        <h2>colors</h2>
-                        <ul class="catagory">
-                            <li><a href="#"><i class="fa fa-angle-right"></i>Black</a> <span>(1)</span></li>
-                            <li><a href="#"><i class="fa fa-angle-right"></i>Blue</a><span>(2)</span></li>
-                            <li><a href="#"><i class="fa fa-angle-right"></i>Green</a><span>(8)</span></li>
-                            <li><a href="#"><i class="fa fa-angle-right"></i>Yellow</a><span>(4)</span></li>
-                            <li><a href="#"><i class="fa fa-angle-right"></i>Red</a><span>(8)</span></li>
-                            <li><a href="#"><i class="fa fa-angle-right"></i>White</a><span>(6)</span></li>
-                        </ul>
+               <!-- -------------------------------COLOR CATEGORY------------------------------------------ -->  
+                            <h2>colors</h2>
+                            <ul class="catagory">
+                                <?php 
+                                    //query select
+                                    $sql = "SELECT * FROM `color`"; 
+                                    $query = mysqli_query($conn,$sql); //thực thi sql
+                                    while ($row = mysqli_fetch_assoc($query)) { //lặp lấy dữ liẹu
+                                        
+                                ?>
+                                <li><a href="shop.php?id_color=<?php echo $row['id_color'] ?>"><i class="fa fa-angle-right"></i><?php echo $row['name']; ?></a> <span>
+                                    <?php 
+                                        $sql1 = 'SELECT * FROM `product` WHERE `id_color` = '.$row['id_color'];
+                                        $data = mysqli_query($conn,$sql1);
+                                        echo mysqli_num_rows($data);
+                                     ?>
+                                </span></li>
+                            <?php } ?>
+       <!-- -------------------------------END------------------------------------------ -->
+                            </ul>
                     </div>
                 </div>
                 <div class="popular_tag_area" style="margin-left: 10px;">
                     <div class="popular_items">
                         <h2>popular brand</h2>
                         <ul id="single_popular">
-                            <li><a href="#">Panasonic</a></li>
-                            <li><a href="#">Toshiba</a></li>
-                            <li><a href="#">Mitsubisi</a></li>
-                            <li><a href="#">Senko</a></li>
-                            <li><a href="#">Yanfan</a></li>
+            <!-- -------------------------------The Firm------------------------------------------ -->
+                                <?php 
+                                    $sql = "SELECT * FROM `the_firm`";
+                                    $query = mysqli_query($conn,$sql);
+                                    while ($row = mysqli_fetch_assoc($query)) {
+                                  
+                                 ?>
+                                <li><a href="shop.php?id_the_firm=<?php echo $row['id_the_firm'] ?>"><?php echo $row['name']; ?></a></li>
+                            <?php } ?>
+       <!-- -------------------------------END------------------------------------------ -->
                         </ul>
                     </div>
                 </div>
@@ -273,49 +305,41 @@
                             </div>
                             <div class="clothing_carousel_list">
                                 <div class="single_clothing_product">
+            <!-- -------------------------------Latest Products------------------------------------------ -->                        <?php 
+                                        $sql = "SELECT * FROM `product` ORDER BY id_product DESC LIMIT 3";
+                                        $query = mysqli_query($conn,$sql);
+                                        while ($row = mysqli_fetch_assoc($query)) {
+                                     ?>
                                     <div class="clothing_item">
-                                        <img src="images/img-products/quattran (1).jpg" alt="" />
+                                        <img src="<?php echo $row['image'] ?>" alt="" />
                                         <div class="product_clothing_details">
-                                            <h2><a href="#">Yanmar L379</a></h2>
+                                            <h2><a href="product.php?id_product=<?php echo $row['id_product'] ?>"><?php echo $row['name']; ?></a></h2>
                                             <i class="fa fa-star"></i>
                                             <i class="fa fa-star"></i>
                                             <i class="fa fa-star"></i>
                                             <i class="fa fa-star"></i>
                                             <i class="fa fa-star"></i>
-                                            <p>&emsp;$427.55</p>
+                                            <p><?php echo number_format($row['price']); ?></p>
                                         </div>
                                     </div>
-                                    <div class="clothing_item">
-                                        <img src="images/box11.png" alt="" />
-                                        <div class="product_clothing_details">
-                                            <h2><a href="#">Genesis X506</a></h2>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <p>&emsp;&nbsp;$39.99</p>
-                                        </div>
-                                    </div>
-                                    <div class="clothing_item">
-                                        <img src="images/ceiling6.png" alt="" />
-                                        <div class="product_clothing_details">
-                                            <h2><a href="#">Royal S650-CX</a></h2>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <p>&emsp;$739.52</p>
-                                    </div>
-                                </div>
-                            </div>
+                                   <?php } ?>
+             <!-- -------------------------------END------------------------------------------ -->                   </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-10">
                 <!-- Start preview Product details area -->
+                <?php 
+                    //kiểm tra + lấy id product được gửi qua
+                    if(isset($_GET['id_product'])){
+                        $idsp = $_GET['id_product']; //lấy giá trị id_product
+                        $sql = "SELECT * FROM `product` WHERE id_product = $idsp"; //sql lấy sp dựa vào id product
+                        $query = mysqli_query($conn,$sql); //thực thi sql
+                        $row = mysqli_fetch_assoc($query); //đọc dữ liệu
+                        $arrayImage = explode("@", $row['array_image_description']); // cắt chuỗi hình ảnh mô tả
+                    }
+                 ?>
                 <div class="blog_single_view_area">
                     <div class="container-fluid">
                         <div class="row">
@@ -324,29 +348,29 @@
                                     <div class="tab-content tab_content_style">
                                         <div id="tab1" class="tab-pane fade in active">
                                             <div class="blog_tabs">
-                                                <a class="fancybox" href="./images/product (2).jpg" data-fancybox-group="gallery" title="">
-                                                    <img src="./images/product (2).jpg" alt="" />
+                                                <a class="fancybox" href="<?php echo $arrayImage[0]; ?>" data-fancybox-group="gallery" title="">
+                                                    <img src="<?php echo $arrayImage[0]; ?>" alt="" />
                                                 </a>
                                             </div>
                                         </div>
                                         <div id="tab2" class="tab-pane fade">
                                             <div class="blog_tabs">
-                                                <a class="fancybox" href="images/ceilingsm.png" data-fancybox-group="gallery" title="">
-                                                    <img src="images/ceilingsm.png" alt="" />
+                                                <a class="fancybox" href="<?php echo $arrayImage[1]; ?>" data-fancybox-group="gallery" title="">
+                                                    <img src="<?php echo $arrayImage[1]; ?>" alt="" />
                                                 </a>
                                             </div>
                                         </div>
                                         <div id="tab3" class="tab-pane fade">
                                             <div class="blog_tabs">
-                                                <a class="fancybox" href="./images/img-products/quatphunsuong.png" data-fancybox-group="gallery" title="">
-                                                    <img src="./images/img-products/quatphunsuong.png" alt="" />
+                                                <a class="fancybox" href="<?php echo $arrayImage[2]; ?>" data-fancybox-group="gallery" title="">
+                                                    <img src="<?php echo $arrayImage[2]; ?>" alt="" />
                                                 </a>
                                             </div>
                                         </div>
                                         <div id="tab4" class="tab-pane fade">
                                             <div class="blog_tabs">
-                                                <a class="fancybox" href="images/img-products/quatphunsuong3.jpg" data-fancybox-group="gallery" title="">
-                                                    <img src="images/img-products/quatphunsuong3.jpg" alt="" />
+                                                <a class="fancybox" href="<?php echo $arrayImage[3]; ?>" data-fancybox-group="gallery" title="">
+                                                    <img src="<?php echo $arrayImage[3]; ?>" alt="" />
                                                 </a>
                                             </div>
                                         </div>
@@ -355,25 +379,64 @@
                                         <ul class="tab_style tab_bottom">
                                             <li class="active">
                                                 <div class="blog_single_carousel">
-                                                    <a data-toggle="tab" href="#tab1"><img src="./images/product (2).jpg" alt="" width="128px" height="153px" /></a>
+                                                    <a data-toggle="tab" href="#tab1"><img src="<?php echo $arrayImage[0]; ?>" alt="" width="128px" height="153px" /></a>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="blog_single_carousel">
-                                                    <a data-toggle="tab" href="#tab2"><img src="images/ceilingsm.png" alt="" width="128px" height="153px" /></a>
+                                                    <a data-toggle="tab" href="#tab2"><img src="<?php echo $arrayImage[1]; ?>" alt="" width="128px" height="153px" /></a>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="blog_single_carousel">
+                                                    <a data-toggle="tab" href="#tab3"><img src="<?php echo $arrayImage[2]; ?>" alt="" width="128px" height="153px" /></a>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="blog_single_carousel">
+                                                    <a data-toggle="tab" href="#tab4"><img src="<?php echo $arrayImage[3]; ?>" alt="" width="128px" height="153px" /></a>
                                                 </div>
                                             </li>
                                         </ul>
                                     </div>
                                 </div>
                                 <div class="my_deal">
-                                    <a href="cart.php"><button> BUY NOW <br><span class="btn_buy">Deliver to home</span></button></a>
+                                    <a href="product.php?buy_now=buy_now&id_product=<?php echo $idsp; ?>"><button> BUY NOW <br><span class="btn_buy">Deliver to home</span></button></a>
                                     <img src="./images/deals.png" width="100%" alt="">
+   <!-- -------------------------------------------SỬ LÍ THÊM GIỎ HÀNG-------------------------- -->
+                    <?php 
+                    // nếu tồn tại buy_now nghĩa là nguwoif dùng bấm mua'
+                    if(isset($_GET['buy_now'])){
+                        //kiểm tra xem người dùng đã đăng nhập trước đó chưa
+                        if($_SESSION["iduser"] != null){
+                            $iduser = $_SESSION["iduser"];
+
+                            $sql = "INSERT INTO `cart`( `Id_user`, `id_product`, `name_product`, `price`, `number`, `image`) VALUES ($_SESSION['iduser'],$idsp,$row['name'],$row['price'],1,$row['image'])";
+                            $query = mysqli_query($conn,$sql);
+
+                            if($query){
+                                //show alert + điều hướng đến trang cart
+                                echo "<script language='javascript'>";
+                                echo "alert('INSERT CART SUCCESSFULLY');";
+                                echo "window.location='cart.php';";
+                                echo "</script>";
+                            }
+                         
+                        }else{
+                        //show alert + điều hướng đến trang login
+                        echo "<script language='javascript'>";
+                        echo "alert('Please login...');";
+                        echo "window.location='my-account.php';";
+                        echo "</script>";
+                        }
+                    }
+                     ?>
+         <!------- -------------------------------------------END-------------------------- -->  
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                 <div class="blog_product_details">
-                                    <h2 class="blog_heading"><a href="">Mountain Air 52YFT-1091</a></h2>
+                                    <h2 class="blog_heading"><a href=""><?php echo $row['name']; ?></a></h2>
                                     <div class="product_rating">
                                         <i class="fa fa-star"></i>
                                         <i class="fa fa-star"></i>
@@ -386,7 +449,7 @@
                                     </div>
                                     <div class="pricing_rate">
                                         <div class="d-flex align-items-center">
-                                            <p class="rating_dollor rating_margin"><span class="rating_value_two">$862.00</span></p>
+                                            <p class="rating_dollor rating_margin"><span class="rating_value_two"><?php echo number_format($row['price'])." VND"; ?></span></p>
                                             <div class="product_blog_button d-flex">
                                                 <div class="cart_blog_details blog_icon_border">
                                                     <i class="far fa-heart"></i>
@@ -407,12 +470,7 @@
                                         <p class="blog_texts">
                                             <p class="about-this-item"><b>About this item</b></p>
                                             <ul class="aboutthisitem">
-                                                <li>Mountain Air 52YFT-1091 is a decorative ceiling fan with integrated LEDs to help use the space more sparkling and luxurious.</li>
-                                                <li>Modern fan design, wings are made of laminated wood with a beautiful gray paint suitable for all installation spaces such as homes, restaurants, and apartments.</li>
-                                                <li>The ceiling fan has 4 wings, the blade diameter is 132cm, will be suitable for installation for a large room space of 12 m&sup2; - 15 m&sup2;. The engine is protected by stainless steel plate (Brush Nickel)
-                                                    that is scratch resistant and always shiny.</li>
-                                                <li>Mountain Air 52YFT -1091 ceiling fan has a 70W fan capacity, 30W LED bulb capacity saves energy. The motor is manufactured using high technology to keep the fan running smoothly and without vibrations.</li>
-                                                <li>The product comes with a remote control to help you adjust the lights or the wind speed more conveniently.</li>
+                                                <?php echo $row['description']; ?>
                                             </ul>
                                         </p>
                                     </div>
@@ -445,75 +503,83 @@
                                             <div class="parameter">
                                                 <div class="col-lg-8">
                                                     <h2>Specifications</h2>
+                     <!-- ---------------------------Specifications----------------------------- -->
+                                                    <?php 
+                                                    //query select specifications
+                                                        $sql = "SELECT * FROM `specifications` WHERE id_specifications = $idsp";
+                                                        $query1 = mysqli_query($conn,$sql); //thuc thi sql
+                                                        $row1 = mysqli_fetch_assoc($query1); //lay du lieu
+                                                     ?>
+                     <!-- ---------------------------END----------------------------- -->
                                                     <table class="table table-bordered  table-striped">
                                                         <tbody>
                                                             <tr>
                                                                 <td>Area used</td>
-                                                                <td>12m &sup2; - 15m &sup2;</td>
+                                                                <td><?php echo $row1['area_used']; ?></td>
 
                                                             </tr>
                                                             <tr>
                                                                 <td>Voltage</td>
-                                                                <td>220V</td>
+                                                                <td><?php echo $row1['voltage']; ?></td>
 
                                                             </tr>
                                                             <tr>
                                                                 <td>Wattage</td>
-                                                                <td>70W</td>
+                                                                <td><?php echo $row1['wattage']; ?></td>
 
                                                             </tr>
 
                                                             <tr>
                                                                 <td>Wind speed</td>
-                                                                <td> 3m/s</td>
+                                                                <td> <?php echo $row1['wind_speed']; ?></td>
 
                                                             </tr>
 
                                                             <tr>
                                                                 <td>Number of propellers</td>
-                                                                <td>4</td>
+                                                                <td><?php echo $row1['number_of_propellers']; ?></td>
 
                                                             </tr>
 
                                                             <tr>
                                                                 <td>propeller material</td>
-                                                                <td>Laminated wood painted color</td>
+                                                                <td><?php echo $row1['propeller_material']; ?></td>
 
                                                             </tr>
 
                                                             <tr>
                                                                 <td>Control</td>
-                                                                <td>Yes</td>
+                                                                <td><?php echo $row1['control']; ?></td>
 
                                                             </tr>
 
                                                             <tr>
                                                                 <td>Fan diameter</td>
-                                                                <td>132 cm</td>
+                                                                <td><?php echo $row1['fan_diameter']; ?></td>
 
                                                             </tr>
 
                                                             <tr>
                                                                 <td>Lamp wattage</td>
-                                                                <td>18W</td>
+                                                                <td><?php echo $row1['lamp_wattage']; ?></td>
 
                                                             </tr>
 
                                                             <tr>
                                                                 <td>Brand</td>
-                                                                <td>Japan</td>
+                                                                <td><?php echo $row1['brand']; ?></td>
 
                                                             </tr>
 
                                                             <tr>
                                                                 <td>Made in</td>
-                                                                <td>Japan</td>
+                                                                <td><?php echo $row1['made_in']; ?></td>
 
                                                             </tr>
 
                                                             <tr>
                                                                 <td>Guarantee</td>
-                                                                <td>5 years</td>
+                                                                <td><?php echo $row1['guarantee']; ?></td>
 
                                                             </tr>
                                                         </tbody>
@@ -649,11 +715,20 @@
                                 </div>
                                 <div class="row">
                                     <div class="upsell_product_list">
+            <!--------------------------------------Similar Products--------------------------  -->
+                                    <?php 
+                                        $id_category = $row['id_category']; // lay id_category 
+                                        //lấy những sản phẩm liên quan dựa vào  id_category
+                                        $sql2 = "SELECT * FROM `product` WHERE id_category = $id_category";
+                                        $query = mysqli_query($conn,$sql2);
+
+                                        $row = mysqli_fetch_assoc($query);
+                                     ?>
                                         <div class="col-lg-3">
                                             <div class="single_upsell">
-                                                <a href="#"><img src="images/ceiling1.png" alt="" /></a>
+                                                <a href="#"><img src="<?php echo $row['image'] ?>" alt="" /></a>
                                                 <div class="upsell_details">
-                                                    <h2><a href="">Toshiba FX570-PS</a></h2>
+                                                    <h2><a href=""><?php echo $row['name']; ?></a></h2>
                                                     <div class="text-center">
                                                         <div class="product_rating">
                                                             <i class="fa fa-star"></i>
@@ -666,94 +741,11 @@
                                                             <a href="#">10 Comment </a>
                                                         </div>
                                                     </div>
-                                                    <p>$433.00</p>
+                                                    <p><?php echo number_format($row['price']); ?> VND</p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-3">
-                                            <div class="single_upsell">
-                                                <a href="#"><img src="images/ceiling2.png" alt="" /></a>
-                                                <div class="upsell_details">
-                                                    <h2><a href="">Yanmar Ino S602</a></h2>
-                                                    <div class="text-center">
-                                                        <div class="product_rating">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star-o"></i>
-                                                        </div>
-                                                        <div class="product_rating">
-                                                            <a href="#">21 Comment </a>
-                                                        </div>
-                                                    </div>
-                                                    <p>$476.00</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="single_upsell">
-                                                <a href="#"><img src="images/ceiling3.png" alt="" /></a>
-                                                <div class="upsell_details">
-                                                    <h2><a href="">Toshiba CF327</a></h2>
-                                                    <div class="text-center">
-                                                        <div class="product_rating">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star-o"></i>
-                                                        </div>
-                                                        <div class="product_rating">
-                                                            <a href="#">15 Comment </a>
-                                                        </div>
-                                                    </div>
-                                                    <p>$499.00</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="single_upsell">
-                                                <a href="#"><img src="images/ceiling4.png" alt="" /></a>
-                                                <div class="upsell_details">
-                                                    <h2><a href="">Panasonic SC666</a></h2>
-                                                    <div class="text-center">
-                                                        <div class="product_rating">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star-o"></i>
-                                                        </div>
-                                                        <div class="product_rating">
-                                                            <a href="#">29 Comment </a>
-                                                        </div>
-                                                    </div>
-                                                    <p>$788.00</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="single_upsell">
-                                                <a href="#"><img src="images/ceiling5.png" alt="" /></a>
-                                                <div class="upsell_details">
-                                                    <h2><a href="">Panasonic S650-AMG</a></h2>
-                                                    <div class="text-center">
-                                                        <div class="product_rating">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star-o"></i>
-                                                        </div>
-                                                        <div class="product_rating">
-                                                            <a href="#">17 Comment </a>
-                                                        </div>
-                                                    </div>
-                                                    <p>$1,256.00</p>
-                                                </div>
-                                            </div>
-                                        </div>
+              <!--------------------------------------END--------------------------  -->                         
                                     </div>
                                 </div>
                             </div>

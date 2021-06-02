@@ -1,4 +1,5 @@
 <!doctype html>
+<?php include 'handling/utils/connect.php'; ?>
 <!-- //lấy tất cả văn bản / mã / đánh dấu tồn tại trong tệp được chỉ định và sao chép nó vào tệp sử dụng câu lệnh include. -->
 <html class="no-js" lang="en">
 
@@ -48,32 +49,6 @@
     <!-- modernizr JS -->
     <script src="js/vendor/modernizr-2.8.3.min.js"></script>
      
-    <?php 
-    // session_start();
-   
-    // include 'handling/utils/connect.php';
-    // $_SESSION["search"]= isset($_GET['input_search'])? $_GET['input_search'] : '';
-    // $_SESSION["btn_seemore"] = "btn_seemore";
-    // $_SESSION["btn_search"]=isset($_GET['btn_search'])? $_GET['btn_search'] : '';
-
-    // if($_SESSION["btn_search"] == "btn_search"){
-    //     $sql = "SELECT * FROM `product` WHERE `name` LIKE '%".$_SESSION["search"]."%' ORDER BY `id_product` DESC ";
-    //         $data = mysqli_query($conn,$sql); //enforcement query seach
-    //         // nếu dữ liệu tìm kiếm rỗng -> quay về  query select * from + show alert
-    //         if(mysqli_num_rows($data) == 0){
-    //             $_SESSION["btn_search"] = '';
-    //             $_SESSION["btn_seemore"] = 'btn_seemore';
-    //         }else{
-    //  $_SESSION["btn_seemore"] = '';
-    //         }
-    //         $_SESSION["loadMoreCount"] = $count += 1;
-    // }else{
-    //     $_SESSION["btn_seemore"] = "btn_seemore";
-    //     $_SESSION["loadMoreCount"] = $count += 1;
-    // }
-    
-
- ?>
 </head>
 
 <body>
@@ -200,7 +175,7 @@
                                                 while ($row = mysqli_fetch_assoc($data)) {
                                                 ?>
                                            
-                                                <a href="product.php?id_category=<?php echo $row['id_category']; ?>"><i class="fa fa-angle-right"></i><?php echo $row['name'] ?></a>
+                                                <a href="shop.php?id_category=<?php echo $row['id_category']; ?>"><i class="fa fa-angle-right"></i><?php echo $row['name'] ?></a>
                                             <?php } ?>
                 <!-- -------------------------------END MENU------------------------------------------ -->
                                         </div>
@@ -353,21 +328,8 @@
                     loadMoreNewCount: loadMoreCount  
                  });
              });
-        });
-        //    }
-        // function load(){
-        //      var loadMoreCount = 8;
-        //      $("h2").click(function(){
-        //         loadMoreCount = loadMoreCount + 4;
-        //         $("h2").load("load_more_product_home.php",{
-        //             loadMoreNewCount: loadMoreCount,
-        //          });
-        //      });
 
-        // }
-        // href="<?php 
-        //             echo '?input_search='.$_SESSION["search"].'&btn_seemore='.$_SESSION["btn_seemore"].'&btn_search='.$_SESSION["btn_search"].'&loadMoreCount='.$_SESSION["loadMoreCount"];
-        //              ?>"
+        });
         
     </script>
             <div class="row" id="seermore">
@@ -385,7 +347,7 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="more_feature_area">
-                    <h2 ><a  id="button-tesst" >See More...</a></h2>
+                    <h2 ><?php echo isset(($_GET['btn_search']))? '<a href="javascript:history.go(-1)">GO BACK</a>' : '<a id="button-tesst">Seemore</a>'; ?></h2>
                 </div>
             </div>
         </div>

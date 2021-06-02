@@ -1,3 +1,4 @@
+<?php include 'handling/utils/connect.php'; ?>
 <!doctype html>
 <html class="no-js" lang="en">
 
@@ -99,10 +100,10 @@
                     <!--End Logo area -->
                 </div>
                 <div class="col-lg-5 col-md-4 col-sm-4 col-xs-12 text-center">
-                    <form action="#" name="myForm">
+                    <form action="" name="myForm" method="get">
                         <div class="search_box ">
-                            <input id="itp" class="input_text" type="text" placeholder="Search" />
-                            <button type="submit" class="btn-search">
+                            <input id="itp" name = "input_search" class="input_text" type="text" placeholder="Search" />
+                            <button type="submit" name ="btn_search" class="btn-search">
 									<span><i class="fa fa-search"></i></span>
 							</button>
                         </div>
@@ -160,14 +161,15 @@
                                 <div class="mega_menu_list">
                                     <div class="single_megamenu">
                                         <div class="items_list">
-                                            <a href="product.php"><i class="fa fa-angle-right"></i> Ceiling Fans</a>
-                                            <a href="product1.php"><i class="fa fa-angle-right"></i> Tower Fans</a>
-                                            <a href="product2.php"><i class="fa fa-angle-right"></i> Misting Fans</a>
-                                            <a href="product3.php"><i class="fa fa-angle-right"></i> Steam Fans</a>
-                                            <a href="product4.php"><i class="fa fa-angle-right"></i> Stand Fans</a>
-                                            <a href="product5.php"><i class="fa fa-angle-right"></i> Wall Fans</a>
-                                            <a href="product6.php"><i class="fa fa-angle-right"></i> Box Fans</a>
-                                            <a href="product7.php"><i class="fa fa-angle-right"></i> Exhaust Fan</a>
+                          <!-----------------  -- --------------ĐỔ DỮ LIỆU  MENU SHOP-------------------------------->
+                                            <?php  
+                                                $sql = 'SELECT * FROM `category`'; //query select
+                                                $data = mysqli_query($conn,$sql); //thuc thi query
+                                                while ($row = mysqli_fetch_assoc($data)) { // lap du lieu
+                                                ?>
+                                            <a href="shop.php?id_category=<?php echo $row['id_category'] ?>"><i class="fa fa-angle-right"></i> <?php echo $row['name'] ?></a>
+                                            <?php } ?>
+                <!-- -------------------------------END MENU------------------------------------------ -->   
                                         </div>
                                     </div>
                                 </div>
@@ -218,14 +220,24 @@
                         <div class="catagory_area">
                             <h2>category</h2>
                             <ul class="catagory">
-                                <li><a href="#"><i class="fa fa-angle-right"></i>ceiling fans</a> <span>(12)</span></li>
-                                <li><a href="#"><i class="fa fa-angle-right"></i>tower fans</a><span>(6)</span></li>
-                                <li><a href="#"><i class="fa fa-angle-right"></i>misting fans</a><span>(6)</span></li>
-                                <li><a href="#"><i class="fa fa-angle-right"></i>steam fans</a><span>(3)</span></li>
-                                <li><a href="#"><i class="fa fa-angle-right"></i>stand fans</a><span>(6)</span></li>
-                                <li><a href="#"><i class="fa fa-angle-right"></i>wall fans</a><span>(3)</span></li>
-                                <li><a href="#"><i class="fa fa-angle-right"></i>box fans</a><span>(3)</span></li>
-                                <li><a href="#"><i class="fa fa-angle-right"></i>exhaust fans</a><span>(2)</span></li>
+                   <!-----------------  -- --------------ĐỔ DỮ LIỆU  MENU CATEGORY-------------------------------->
+                            <?php  
+                            //query select
+                                $sql = 'SELECT * FROM `category`';
+                                $data = mysqli_query($conn,$sql); //thực thi query
+                                while ($row = mysqli_fetch_assoc($data)) { // lặp dữ liệu
+                                ?>
+                                <li><a href="shop.php?id_category=<?php echo $row['id_category'] ?>"><i class="fa fa-angle-right"></i><?php echo $row['name'] ?></a> 
+                                    <span>
+                                    <?php 
+                                        //query select ( đếm số luong sp co trong catrgory)
+                                        $sql = 'SELECT * FROM `product` WHERE `id_category` = '.$row['id_category'];
+                                        $query = mysqli_query($conn,$sql);
+                                        echo '('.mysqli_num_rows($query).')';
+                                     ?>
+                                </span></li>
+                            <?php } ?>
+                <!-- -------------------------------END MENU------------------------------------------ -->               
                             </ul>
                         </div>
                         <div class="priceing_area">
@@ -241,14 +253,25 @@
                             </div>
                         </div>
                         <div class="catagory_area">
+         <!-- -------------------------------COLOR CATEGORY------------------------------------------ -->  
                             <h2>colors</h2>
                             <ul class="catagory">
-                                <li><a href="#"><i class="fa fa-angle-right"></i>Black</a> <span>(1)</span></li>
-                                <li><a href="#"><i class="fa fa-angle-right"></i>Blue</a><span>(2)</span></li>
-                                <li><a href="#"><i class="fa fa-angle-right"></i>Green</a><span>(8)</span></li>
-                                <li><a href="#"><i class="fa fa-angle-right"></i>Yellow</a><span>(4)</span></li>
-                                <li><a href="#"><i class="fa fa-angle-right"></i>Red</a><span>(8)</span></li>
-                                <li><a href="#"><i class="fa fa-angle-right"></i>White</a><span>(6)</span></li>
+                                <?php 
+                                    //query select
+                                    $sql = "SELECT * FROM `color`"; 
+                                    $query = mysqli_query($conn,$sql); //thực thi sql
+                                    while ($row = mysqli_fetch_assoc($query)) { //lặp lấy dữ liẹu
+                                        
+                                ?>
+                                <li><a href="shop.php?id_color=<?php echo $row['id_color'] ?>"><i class="fa fa-angle-right"></i><?php echo $row['name']; ?></a> <span>
+                                    <?php 
+                                        $sql1 = 'SELECT * FROM `product` WHERE `id_color` = '.$row['id_color'];
+                                        $data = mysqli_query($conn,$sql1);
+                                        echo mysqli_num_rows($data);
+                                     ?>
+                                </span></li>
+                            <?php } ?>
+       <!-- -------------------------------END------------------------------------------ -->
                             </ul>
                         </div>
                     </div>
@@ -256,11 +279,16 @@
                         <div class="popular_items">
                             <h2>popular brand</h2>
                             <ul id="single_popular">
-                                <li><a href="#">Panasonic</a></li>
-                                <li><a href="#">Toshiba</a></li>
-                                <li><a href="#">Mitsubisi</a></li>
-                                <li><a href="#">Senko</a></li>
-                                <li><a href="#">Yanfan</a></li>
+       <!-- -------------------------------The Firm------------------------------------------ -->
+                                <?php 
+                                    $sql = "SELECT * FROM `the_firm`";
+                                    $query = mysqli_query($conn,$sql);
+                                    while ($row = mysqli_fetch_assoc($query)) {
+                                  
+                                 ?>
+                                <li><a href="shop.php?id_the_firm=<?php echo $row['id_the_firm'] ?>"><?php echo $row['name']; ?></a></li>
+                            <?php } ?>
+       <!-- -------------------------------END------------------------------------------ -->
                             </ul>
                         </div>
                     </div>
@@ -273,81 +301,26 @@
                             </div>
                             <div class="clothing_carousel_list">
                                 <div class="single_clothing_product">
+            <!-- -------------------------------Latest Products------------------------------------------ -->                        <?php 
+                                        $sql = "SELECT * FROM `product` ORDER BY id_product DESC LIMIT 3";
+                                        $query = mysqli_query($conn,$sql);
+                                        while ($row = mysqli_fetch_assoc($query)) {
+                                     ?>
                                     <div class="clothing_item">
-                                        <img src="images/img-products/quattran (1).jpg" alt="" />
+                                        <img src="<?php echo $row['image'] ?>" alt="" />
                                         <div class="product_clothing_details">
-                                            <h2><a href="#">Yanmar L379</a></h2>
+                                            <h2><a href="product.php?id_product=<?php echo $row['id_product'] ?>"><?php echo $row['name']; ?></a></h2>
                                             <i class="fa fa-star"></i>
                                             <i class="fa fa-star"></i>
                                             <i class="fa fa-star"></i>
                                             <i class="fa fa-star"></i>
                                             <i class="fa fa-star"></i>
-                                            <p>&emsp;$427.55</p>
+                                            <p><?php echo number_format($row['price']); ?></p>
                                         </div>
                                     </div>
-                                    <div class="clothing_item">
-                                        <img src="images/box11.png" alt="" />
-                                        <div class="product_clothing_details">
-                                            <h2><a href="#">Genesis X506</a></h2>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <p>&emsp;&nbsp;$39.99</p>
-                                        </div>
-                                    </div>
-                                    <div class="clothing_item">
-                                        <img src="images/ceiling6.png" alt="" />
-                                        <div class="product_clothing_details">
-                                            <h2><a href="#">Royal S650-CX</a></h2>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <p>&emsp;$739.52</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="single_clothing_product">
-                                    <div class="clothing_item">
-                                        <img src="images/img-products/quattran (1).jpg" alt="" />
-                                        <div class="product_clothing_details">
-                                            <h2><a href="#">ddddddddđ</a></h2>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <p>$14.00</p>
-                                        </div>
-                                    </div>
-                                    <div class="clothing_item">
-                                        <img src="images/img-products/quattran (5).jpg" alt="" />
-                                        <div class="product_clothing_details">
-                                            <h2><a href="#">sssssssssssss</a></h2>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <p>$123.00</p>
-                                        </div>
-                                    </div>
-                                    <div class="clothing_item">
-                                        <img src="images/img-products/quatphunsuong3.jpg" alt="" />
-                                        <div class="product_clothing_details">
-                                            <h2><a href="#">iiiiiiiiiiiii</a></h2>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <p>$123.00</p>
-                                        </div>
-                                    </div>
-                                </div>
+                                   <?php } ?>
+             <!-- -------------------------------END------------------------------------------ -->                   </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -364,103 +337,49 @@
                         <div class="tab-content tab_content_style">
                             <div id="tab1" class="tab-pane fade in active">
                                 <div class="row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <div class="product_list">
-                                            <div class="single_product repomsive_768">
-                                                <a href="product.php" ><img src="images/img-shop/quat (1).jpg" alt="" /></a>
-                                                <div class="product_details">
-                                                    <h2>Toshiba LX-22</h2>
-                                                    <p><span class="popular_price">15 $</span></p>
-                                                </div>
-                                                <div class="product_detail">
-                                                    <div class="star_icon">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-half-o"></i>
-                                                    </div>
-                                                    <div class="product_button">
-                                                        <div class="cart_details">
-                                                            <a href="cart.php" ><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-                                                        </div>
-                                                        <div class="cart_details">
-                                                            <i class="far fa-heart"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <div class="product_list">
-                                            <div class="single_product repomsive_768">
-                                                <a href="product.php" ><img src="images/preview.jpg" alt="" /></a>
-                                                <div class="product_details">
-                                                    <h2>Toshiba FS-520</h2>
-                                                    <p><span class="popular_price">13,5 $</span></p>
-                                                </div>
-                                                <div class="product_detail">
-                                                    <div class="star_icon">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-half-o"></i>
-                                                    </div>
-                                                    <div class="product_button">
-                                                        <div class="cart_details">
-                                                            <a href="cart.php" ><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-                                                        </div>
-                                                        <div class="cart_details">
-                                                            <i class="far fa-heart"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <div class="product_list">
-                                            <div class="single_product repomsive_768">
-                                                <a href="product.php" ><img src="images/img-shop/quat (3).jpg" alt="" /></a>
-                                                <div class="product_details">
-                                                    <h2>Yanfan C29</h2>
-                                                    <p><span class="regular_price">150 $</span> <span class="popular_price">115 $</span></p>
-                                                </div>
-                                                <div class="product_detail">
-                                                    <div class="star_icon">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-half-o"></i>
-                                                    </div>
-                                                    <div class="product_button">
-                                                        <div class="cart_details">
-                                                            <a href="cart.php" ><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-                                                        </div>
+                <!-- -----------------------------ĐỖ DỮ LIỆU PRODUCT--------------------- -->
+                <?php 
+                    //query select mysql
+                    $sql = "SELECT * FROM `product` ORDER BY id_product DESC";
+                    if(isset($_GET['id_category'])){
+                        $sql = "SELECT * FROM `product` WHERE `id_category` = '".$_GET['id_category']."' ORDER BY id_product DESC";
+                    }
+                    if(isset($_GET['id_color'])){
+                        $sql = "SELECT * FROM `product` WHERE `id_color` = '".$_GET['id_color']."' ORDER BY id_product DESC"; 
+                    }
+                    
+                    if(isset($_GET['id_the_firm'])){
+                        $sql = "SELECT * FROM `product` WHERE `id_the_firm` = '".$_GET['id_the_firm']."' ORDER BY id_product DESC"; 
+                    }
 
-                                                        <div class="cart_details">
-                                                            <i class="far fa-heart"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="sale_product">
-                                                    <h5>Sale</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
+                    if(isset($_GET['input_search'])){
+                        $sql = "SELECT * FROM `product` WHERE `name` LIKE '%".$_GET['input_search']."%' ORDER BY `id_product` DESC ";
+                         $query = mysqli_query($conn,$sql);
+                         if (mysqli_num_rows($query) == 0) {
+                            echo "<script language='javascript'>";
+                            echo "alert('No products found ');";
+                            echo "window.location='shop.php';";
+                            echo "</script>";
+                         }
+                    }
+                    $query = mysqli_query($conn,$sql); // thực thi sql
+                    while ($row = mysqli_fetch_assoc($query)) { // lặp dữ liệu
+                    
+                 ?>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <div class="product_list">
-                                            <div class="single_product repomsive_768">
-                                                <a href="product.php" ><img src="images/img-products/quatsacdien3.jpg" alt="" /></a>
+                                            <div class="single_product repomsive_768" style="margin-top: 25px">
+                                                <a  ><img src="<?php echo $row['image'] ?>" alt="" /></a>
                                                 <div class="product_details">
-                                                    <h2>Senko XS-150</h2>
-                                                    <p><span class="regular_price">47 $</span> <span class="popular_price">32,9 $</span></p>
+                                                    <h2 class="ellipsis"><?php echo $row['name']; ?></h2>
+                                                    <p><span class="popular_price"><?php echo number_format($row['price']); ?> VND</span></p>
+                                                    <style type="text/css">
+                                                        .ellipsis {
+                                                        white-space: nowrap;
+                                                        text-overflow: ellipsis;
+                                                        overflow: hidden;
+                                                        }
+                                                     </style>
                                                 </div>
                                                 <div class="product_detail">
                                                     <div class="star_icon">
@@ -472,41 +391,8 @@
                                                     </div>
                                                     <div class="product_button">
                                                         <div class="cart_details">
-                                                            <a href="#" ><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+                                                            <a href="product.php?id_product=<?php echo $row['id_product'] ?>" ><i class="fas fa-shopping-cart"></i> Add to Cart</a>
                                                         </div>
-
-                                                        <div class="cart_details">
-                                                            <i class="far fa-heart"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="sale_product">
-                                                    <h5>Sale</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <div class="product_list">
-                                            <div class="single_product repomsive_768">
-                                                <a href="product.php" ><img src="images/img-products/quattran (9).jpg" alt="" /></a>
-                                                <div class="product_details">
-                                                    <h2>Led KC06</h2>
-                                                    <p><span class="popular_price">837 $</span></p>
-                                                </div>
-                                                <div class="product_detail">
-                                                    <div class="star_icon">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-half-o"></i>
-                                                    </div>
-                                                    <div class="product_button">
-                                                        <div class="cart_details">
-                                                            <a href="cart.php" ><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-                                                        </div>
-
                                                         <div class="cart_details">
                                                             <i class="far fa-heart"></i>
                                                         </div>
@@ -515,254 +401,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <div class="product_list">
-                                            <div class="single_product repomsive_768">
-                                                <a href="product.php" ><img src="images/img-products/quat-phun-suong-1.jpg" alt="" /></a>
-                                                <div class="product_details">
-                                                    <h2>Panasonic L270</h2>
-                                                    <p><span class="popular_price">62 $</span></p>
-                                                </div>
-                                                <div class="product_detail">
-                                                    <div class="star_icon">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-half-o"></i>
-                                                    </div>
-                                                    <div class="product_button">
-                                                        <div class="cart_details">
-                                                            <a href="cart.php" ><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-                                                        </div>
-
-                                                        <div class="cart_details">
-                                                            <i class="far fa-heart"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <div class="product_list">
-                                            <div class="single_product repomsive_768">
-                                                <a href="product.php" ><img src="images/img-shop/quat (7).jpg" alt="" /></a>
-                                                <div class="product_details">
-                                                    <h2>Senko A227</h2>
-                                                    <p><span class="regular_price">99 $</span> <span class="popular_price">89 $</span></p>
-                                                </div>
-                                                <div class="product_detail">
-                                                    <div class="star_icon">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-half-o"></i>
-                                                    </div>
-                                                    <div class="product_button">
-                                                        <div class="cart_details">
-                                                            <a href="cart.php" ><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-                                                        </div>
-
-                                                        <div class="cart_details">
-                                                            <i class="far fa-heart"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="sale_product">
-                                                    <h5>Sale</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <div class="product_list">
-                                            <div class="single_product repomsive_768">
-                                                <a href="product.php" ><img src="images/img-products/quattran (3).jpg" alt="" /></a>
-                                                <div class="product_details">
-                                                    <h2>hhhhhhhhhhhhhhh</h2>
-                                                    <p><span class="popular_price">1.250 $</span></p>
-                                                </div>
-                                                <div class="product_detail">
-                                                    <div class="star_icon">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-half-o"></i>
-                                                    </div>
-                                                    <div class="product_button">
-                                                        <div class="cart_details">
-                                                            <a href="cart.php" ><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-                                                        </div>
-
-                                                        <div class="cart_details">
-                                                            <i class="far fa-heart"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <div class="product_list">
-                                            <div class="single_product repomsive_768">
-                                                <a href="product.php" ><img src="images/img-shop/quat (12).png" alt="" /></a>
-                                                <div class="product_details">
-                                                    <h2>kkkkkkkkkkkkk</h2>
-                                                    <p><span class="popular_price">150 $</span></p>
-                                                </div>
-                                                <div class="product_detail">
-                                                    <div class="star_icon">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-half-o"></i>
-                                                    </div>
-                                                    <div class="product_button">
-                                                        <div class="cart_details">
-                                                            <a href="cart.php" ><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-                                                        </div>
-
-                                                        <div class="cart_details">
-                                                            <i class="far fa-heart"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <div class="product_list">
-                                            <div class="single_product repomsive_768">
-                                                <a href="product.php" ><img src="images/img-shop/quat (11).png" alt="" /></a>
-                                                <div class="product_details">
-                                                    <h2>Rapido Z400-XS
-                                                    </h2>
-                                                    <p><span class="regular_price">144 $</span> <span class="popular_price">132 $</span></p>
-                                                </div>
-                                                <div class="product_detail">
-                                                    <div class="star_icon">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-half-o"></i>
-                                                    </div>
-                                                    <div class="product_button">
-                                                        <div class="cart_details">
-                                                            <a href="cart.php" ><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-                                                        </div>
-
-                                                        <div class="cart_details">
-                                                            <i class="far fa-heart"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="sale_product">
-                                                    <h5>Sale</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <div class="product_list">
-                                            <div class="single_product repomsive_768">
-                                                <a href="product.php" ><img src="images/img-products/quattran (9).jpg" alt="" /></a>
-                                                <div class="product_details">
-                                                    <h2>Royal S400-LX</h2>
-                                                    <p><span class="popular_price">1.365 $</span></p>
-                                                </div>
-                                                <div class="product_detail">
-                                                    <div class="star_icon">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-half-o"></i>
-                                                    </div>
-                                                    <div class="product_button">
-                                                        <div class="cart_details">
-                                                            <a href="cart.php" ><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-                                                        </div>
-
-                                                        <div class="cart_details">
-                                                            <i class="far fa-heart"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <div class="product_list">
-                                            <div class="single_product repomsive_768">
-                                                <a href="product.php" ><img src="images/img-products/quattran (5).jpg" alt="" /></a>
-                                                <div class="product_details">
-                                                    <h2>Royal Super SS65</h2>
-                                                    <p><span class="popular_price">866 $</span></p>
-                                                </div>
-                                                <div class="product_detail">
-                                                    <div class="star_icon">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-half-o"></i>
-                                                    </div>
-                                                    <div class="product_button">
-                                                        <div class="cart_details">
-                                                            <a href="cart.php" ><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-                                                        </div>
-
-                                                        <div class="cart_details">
-                                                            <i class="far fa-heart"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <div class="blog_pagination">
-                                            <h2>Page :</h2>
-                                            <ul class="pagination_list">
-                                                <li class="btna" style="transform: rotate(180deg);">
-                                                    <a href="#!"><img src="img/arrow/pager_arrow_right.gif" alt="" /></a>
-                                                </li>
-                                                <li class="active a">1</li>
-                                                <li class="b"><a href="#">2</a></li>
-                                                <li class="c"><a href="#">3</a></li>
-                                                <li class="btnb">
-                                                    <a href="#!"><img src="img/arrow/pager_arrow_right.gif" alt="" /></a>
-                                                </li>
-
-                                                <script>
-                                                    var btna = document.querySelector('.btna');
-                                                    var btnb = document.querySelector('.btnb');
-                                                    var a = document.querySelector('.a');
-                                                    var b = document.querySelector('.b');
-                                                    btnb.addEventListener('click', function() {
-                                                        a.classList.remove('active');
-                                                        b.classList.add('active');
-                                                    });
-                                                    btna.addEventListener('click', function() {
-                                                        b.classList.remove('active');
-                                                        a.classList.add('active');
-                                                    });
-                                                </script>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
+                                <?php } ?>
+                <!-- -----------------------------ENDPRODUCT--------------------- -->
+                                </div>   
                             </div>
                         </div>
                     </div>
