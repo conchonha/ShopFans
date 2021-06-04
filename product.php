@@ -403,35 +403,67 @@
                                 <div class="my_deal">
                                     <a href="product.php?buy_now=buy_now&id_product=<?php echo $idsp; ?>"><button> BUY NOW <br><span class="btn_buy">Deliver to home</span></button></a>
                                     <img src="./images/deals.png" width="100%" alt="">
-   <!-- -------------------------------------------SỬ LÍ THÊM GIỎ HÀNG-------------------------- -->
-                    <?php 
-                    // nếu tồn tại buy_now nghĩa là nguwoif dùng bấm mua'
-                    if(isset($_GET['buy_now'])){
-                        //kiểm tra xem người dùng đã đăng nhập trước đó chưa
-                        if($_SESSION["iduser"] != null){
-                            $iduser = $_SESSION["iduser"];
-
-                            $sql = "INSERT INTO `cart`( `Id_user`, `id_product`, `name_product`, `price`, `number`, `image`) VALUES ($_SESSION['iduser'],$idsp,$row['name'],$row['price'],1,$row['image'])";
-                            $query = mysqli_query($conn,$sql);
-
-                            if($query){
-                                //show alert + điều hướng đến trang cart
-                                echo "<script language='javascript'>";
-                                echo "alert('INSERT CART SUCCESSFULLY');";
-                                echo "window.location='cart.php';";
-                                echo "</script>";
-                            }
-                         
-                        }else{
-                        //show alert + điều hướng đến trang login
-                        echo "<script language='javascript'>";
-                        echo "alert('Please login...');";
-                        echo "window.location='my-account.php';";
-                        echo "</script>";
-                        }
-                    }
-                     ?>
-         <!------- -------------------------------------------END-------------------------- -->  
+           <!-- -------------------------------------------SỬ LÍ THÊM GIỎ HÀNG-------------------------- -->
+                                                    <?php
+                                // nếu tồn tại buy_now nghĩa là nguwoif dùng bấm mua'
+                                if (isset($_GET['buy_now'])) {
+                                    //kiểm tra xem người dùng đã đăng nhập trước đó chưa
+                                    if ($_SESSION["iduser"] != null) {
+                                        $iduser   = $_SESSION['iduser'];
+                                        //kiem tra don hang da tồn tại trước đó chưa
+                                        $sql_cu   = "SELECT * FROM `cart` WHERE `id_product` = '$idsp' AND `Id_user` = '$iduser'";
+                                        $query_cu = mysqli_query($conn, $sql_cu);
+                                        if (mysqli_num_rows($query_cu) > 0) {
+                                            $row_cu     = mysqli_fetch_assoc($query_cu);
+                                            //update lại số lượng + giá tiền cho sản phẩm đó
+                                            $price_moi  = $row_cu['price'] + $row['price'];
+                                            $number_moi = $row_cu['number'] + 1;
+                                            $sql_update = "UPDATE `cart` SET `price`='$price_moi',`number`='$number_moi' WHERE id_product = $idsp AND Id_user = '$iduser' ";
+                                            $query_moi  = mysqli_query($conn, $sql_update);
+                                            if ($query_moi) {
+                                                //show alert + điều hướng đến trang cart
+                                                echo "<script language='javascript'>";
+                                                echo "alert('UPDATE CART SUCCESSFULLY');";
+                                                echo "window.location='cart.php';";
+                                                echo "</script>";
+                                            } else {
+                                                //show alert + điều hướng đến trang cart
+                                                echo "<script language='javascript'>";
+                                                echo "alert('UPDATE CART ERROR PLEASE TRY AGAIN');";
+                                                echo "window.location='cart.php';";
+                                                echo "</script>";
+                                            }
+                                        } else {
+                                            //query insert cart
+                                            $sql_insert   = "INSERT INTO `cart`( `Id_user`, `id_product`, `name_product`, `price`, `number`, `image`) VALUES ('" . $_SESSION['iduser'] . "','$idsp','" . $row['name'] . "','" . $row['price'] . "',1,'" . $row['image'] . "')";
+                                            $query_insert = mysqli_query($conn, $sql_insert); //thuc thi query
+                                            
+                                            if ($query_insert) { //thanh cong
+                                                //show alert + điều hướng đến trang cart
+                                                echo "<script language='javascript'>";
+                                                echo "alert('INSERT CART SUCCESSFULLY');";
+                                                echo "window.location='cart.php';";
+                                                echo "</script>";
+                                            } else { //that bai
+                                                //show alert + báo lỗi 
+                                                echo "<script language='javascript'>";
+                                                echo "alert('INSERT CART ERROR PLEASE TRY AGAIN');";
+                                                echo "window.location='product.php?id_product=$idsp'";
+                                                echo "</script>";
+                                            }
+                                        }
+                                        
+                                    } else {
+                                        //show alert + điều hướng đến trang login
+                                        echo "<script language='javascript'>";
+                                        echo "alert('Please login...');";
+                                        echo "window.location='my-account.php';";
+                                        echo "</script>";
+                                    }
+                                }
+                                ?>
+                   <!------- -------------------------------------------END-------------------------- --> 
+ 
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">

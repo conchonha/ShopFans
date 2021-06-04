@@ -1,4 +1,5 @@
 <?php 
+session_start();
 $error      = "";
 
 //kiểm tra người dùng đã nhấn login chưa
@@ -33,7 +34,7 @@ if (isset($_POST['login'])) {
 		$_SESSION["	password"]= $password;
     	//show alert
         echo "<script language='javascript'>";
-        echo "alert('Register successfuly ');";
+        echo "alert('Login successfuly ');";
         echo "window.location='index.php';";
         echo "</script>";
         return;

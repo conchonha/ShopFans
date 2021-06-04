@@ -1,5 +1,7 @@
 <!doctype html>
-<?php include 'handling/utils/connect.php'; ?>
+<?php 
+session_start();
+include 'handling/utils/connect.php'; ?>
 <!-- //lấy tất cả văn bản / mã / đánh dấu tồn tại trong tệp được chỉ định và sao chép nó vào tệp sử dụng câu lệnh include. -->
 <html class="no-js" lang="en">
 
@@ -126,21 +128,44 @@
                             <li>
                                 <a href="cart.php">
                                     <img src="images/cart.webp" width="25%" alt="">
-                                    <span class="cart_zero">2</span>
+                        <!-- ------------------------------------------CART----------------------------- -->
+                            <?php 
+                            //kiểm tra xem người dùng đã đăng nhập trước đó chưa
+                                    if ($_SESSION["iduser"] != null) {
+                                        $iduser = $_SESSION["iduser"];
+                                        $sql = "SELECT * FROM `cart` WHERE Id_user = $iduser";
+                                        $query = mysqli_query($conn,$sql);
+                                       
+                                           
+                             ?>
+                                    <span class="cart_zero"><?php echo mysqli_num_rows($query); ?></span>
                                 </a>
                                 <div class="cart_down_area">
+              <?php  while ($row = mysqli_fetch_assoc($query)) { ?>
                                     <div class="cart_single">
-                                        <a href="#"><img src="images/img-products/quat-phun-suong-1.jpg" alt="" width="30%" /></a>
-                                        <h2><a href="#">Pelonic FS40</a></h2>
-                                        <p>$299.00</p>
+                                        <a href="product.php?id_product=<?php echo $row['id_product']; ?>"><img src="<?php echo $row['image']; ?>" alt="" width="30%" /></a>
+                                        <h2 class="ellipsis"><a href="product.php?id_product=<?php echo $row['id_product']; ?>"><?php echo $row['name_product']; ?></a></h2>
+                                           <style type="text/css">
+                                                .ellipsis {
+                                                white-space: nowrap;
+                                                text-overflow: ellipsis;
+                                                overflow: hidden;
+                                                }
+                                            </style>
+                                        <p><?php echo $row['price']; ?></p>
                                     </div>
-                                    <div class="cart_single">
-                                        <a href="#"><img src="./images/product (3).jpg" alt="" width="30%" /></a>
-                                        <h2><a href="#">Royal Aura Fan S650</a></h2>
-                                        <p>$1259</p>
-                                    </div>
+                            <?php  }
+                                    }else {
+                                        //show alert + điều hướng đến trang login
+                                        echo "<script language='javascript'>";
+                                        echo "alert('Please login...');";
+                                        echo "window.location='my-account.php';";
+                                        echo "</script>";
+                             } ?>
+        <!-- ------------------------END ----------------------- -->   
+                                
                                     <div class="cart_shoptings">
-                                        <a href="checkout.php" class="cart_shoptings-link">Buy now</a>
+                                        <a href="cart.php" class="cart_shoptings-link">Buy now</a>
                                     </div>
                                 </div>
                             </li>

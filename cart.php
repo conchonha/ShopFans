@@ -1,3 +1,8 @@
+<?php 
+session_start();
+include 'handling/utils/connect.php'; 
+?>
+<!-- //lấy tất cả văn bản / mã / đánh dấu tồn tại trong tệp được chỉ định và sao chép nó vào tệp sử dụng câu lệnh include. -->
 <!doctype html>
 <html class="no-js" lang="en">
 
@@ -87,42 +92,109 @@
                                 <th>Amount</th>
                                 <th>Remove</th>
                             </tr>
+         <!-- ------------------------ ĐỔ DỮ LIỆU GIỎ HÀNG ----------------------- -->                    
+                            <?php 
+                            //kiểm tra xem người dùng đã đăng nhập trước đó chưa
+                                    if ($_SESSION["iduser"] != null) {
+                                        $iduser = $_SESSION["iduser"];
+                                        $sql = "SELECT * FROM `cart` WHERE Id_user = $iduser";
+                                        $query = mysqli_query($conn,$sql);
+                                        while ($row = mysqli_fetch_assoc($query)) {
+                                           
+                             ?>
                             <tr>
                                 <td>
-                                    <a href="#"><img src="images/img-products/quat-phun-suong-1.jpg" alt="" width="40%" /></a>
+                                    <a href="product.php?id_product=<?php echo $row['id_product']; ?>"><img src="<?php echo $row['image'] ?>" alt="" width="40%" /></a>
 
                                 </td>
                                 <td>
-                                    <h4>ROYAL SOLID 
-                                        <span>Category: Misting Fan</span>
+                                    <h4><?php echo $row['name_product']; ?>
+                                        <!-- <span>Category: Misting Fan</span> -->
                                     </h4>
                                 </td>
-                                <td>$ 299</td>
-                                <td><input name="cart[390][qty]" value="1" size="4" title="Qty" class="input-text qty" maxlength="12"></td>
+                                <td><?php echo number_format($row['price']); ?> VND</td>
+                                <td><input id="<?php echo $row['id_product']; ?>" name="cart[390][qty]" value="<?php echo $row['number']; ?>" size="4" title="Qty" type="number" min="1" class="input-text qty" maxlength="12"></td>
+
+                                <script type="text/javascript">
+                                    //lắng nghe sự kiện phím enter update số lượng cart
+                                    document.getElementById("<?php echo $row['id_product']; ?>")
+                                        .addEventListener("keyup", function(event) {
+                                        event.preventDefault();
+                                        if (event.keyCode === 13) {
+                                            //lấy giá trị ô input ra
+                                            var s = document.getElementById("<?php echo $row['id_product']; ?>").value;
+                                            //đẩy id_cart + số lượng mới do người dùng nhập lên đường dẫn để php sử lí
+                                            window.location='cart.php?update=update_number&id_cart=<?php echo $row['id_cart'] ?>&input='+s;
+                                        }
+                                    });
+
+                                </script>
                                 <td>
-                                    <a href="#!">
+                                    <a href="cart.php?delete=delete&id_cart=<?php echo $row['id_cart']; ?>">
                                         <i class="fas fa-trash-alt" aria-hidden="true"></i>
                                     </a>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <a href="#"><img src="images/img-products/quattran (3).jpg" alt="" width="40%" /></a>
-                                </td>
-                                <td>
-                                    <h4>ROYAL SOLID
-                                        <span>Category: Ceilling Fan</span>
-                                    </h4>
-                                </td>
-                                <td>$ 1,259</td>
-                                <td><input name="cart[390][qty]" value="1" size="4" title="Qty" class="input-text qty" maxlength="12"></td>
-                                <td>
-                                    <a href="#!">
-                                        <i class="fas fa-trash-alt" aria-hidden="true"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                            <?php  }
+                                    }else {
+                                        //show alert + điều hướng đến trang login
+                                        echo "<script language='javascript'>";
+                                        echo "alert('Please login...');";
+                                        echo "window.location='my-account.php';";
+                                        echo "</script>";
+                                    } ?>
+        <!-- ------------------------END ----------------------- -->    
+                            
                         </table>
+        <!-- ------------------------ SU LI UPDATE + DELETE----------------------- -->
+                         <?php 
+                                    //sử lí update số lượng cart php
+                                    //kiểm tra có sự kiện update ko
+                                    if(isset($_GET['update'])){
+                                        if($_GET['update'] == "update_number" && $_GET['id_cart'] != null && $_GET['input'] != null && $_GET['input'] > 0){
+                                            $id_cart = $_GET['id_cart']; //lấy id_cart cần update
+                                            $inputNumber = $_GET['input']; // lấy số lượng mới
+                                            $sql = "SELECT * FROM `cart` WHERE id_cart = $id_cart"; // lấy thông tin sp trong cart ra
+                                            $query = mysqli_query($conn,$sql); //thực thi truy vấn
+                                            $row1 = mysqli_fetch_assoc($query); // đọc dữ liệu
+                                            $price_moi = ((($row1['price']) / ($row1['number'])) * $inputNumber); //giá tiền mới sau update
+                                            
+                                            //query update number cart
+                                             $sql_update = "UPDATE `cart` SET `price`='$price_moi',`number`='$inputNumber' WHERE `id_cart` = '$id_cart'";
+                                             $query_update = mysqli_query($conn,$sql_update);
+                                             if($query_update){
+                                                //dieu huong ve lai trang cart
+                                                echo "<script language='javascript'>";
+                                                echo "window.location='cart.php'";
+                                                echo "</script>";
+                                             }
+                                        }else{
+                                            //show alert 
+                                            echo "<script language='javascript'>";
+                                            echo "alert('Do not leave the product number blank');";
+                                             echo "window.location='cart.php'";
+                                            echo "</script>";
+                                        }
+                                    }
+
+                                    //nếu tồn tại sự kiện delete và id_cart != null
+                                    if(isset($_GET['delete']) && $_GET['id_cart'] != null){
+                                        $id_cart = $_GET['id_cart']; // lấy id_cart
+                                        $sql_delete = "DELETE FROM `cart` WHERE id_cart=$id_cart"; //query delete
+                                        $query_delete = mysqli_query($conn,$sql_delete); //thực thi query delete
+                                        if($query_delete){
+                                            echo "<script language='javascript'>";
+                                            echo "window.location='cart.php'";
+                                             echo "</script>";
+                                        }else{
+                                            echo "<script language='javascript'>";
+                                            echo "alert('Clear the error please try again later');";
+                                             echo "window.location='cart.php'";
+                                            echo "</script>";
+                                        }
+                                    }
+                                 ?>
+        <!-- ------------------------ END ----------------------- -->
                     </div>
                 </div>
                 <div class="col-lg-3">

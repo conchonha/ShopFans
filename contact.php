@@ -1,3 +1,6 @@
+<?php session_start();
+include 'handling/utils/connect.php';
+//lấy tất cả văn bản / mã / đánh dấu tồn tại trong tệp được chỉ định và sao chép nó vào tệp sử dụng câu lệnh include. -->?>
 <!doctype html>
 <html class="no-js" lang="en">
 
@@ -101,14 +104,21 @@
                     <!--End Logo area -->
                 </div>
                 <div class="col-lg-5 col-md-4 col-sm-4 col-xs-12 text-center">
-                    <form action="#" name="myForm">
+                   
                         <div class="search_box ">
-                            <input id="itp" class="input_text" type="text" placeholder="Search" />
-                            <button type="submit" class="btn-search">
+                            <input id="abc" class="input_text" type="text" placeholder="Search" />
+                            <button onclick="search()" type="submit" class="btn-search">
 									<span><i class="fa fa-search"></i></span>
 							</button>
                         </div>
-                    </form>
+                    <script type="text/javascript">
+                            function search() {
+                                //lấy giá trị ô input ra
+                            var s = document.getElementById("abc").value;
+                                //lấy input_search + chuyển trang index
+                             window.location='index.php?input_search='+s+'&btn_search=btn_search';
+                           }
+                        </script>
                     <!--End Search area -->
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 mb-3">
@@ -120,19 +130,42 @@
                             <li>
                                 <a href="cart.php">
                                     <img src="images/cart.webp" width="25%" alt="">
-                                    <span class="cart_zero">2</span>
+                                     <!-- ------------------------------------------CART----------------------------- -->
+                                    <?php 
+                            //kiểm tra xem người dùng đã đăng nhập trước đó chưa
+                                    if ($_SESSION["iduser"] != null) {
+                                        $iduser = $_SESSION["iduser"];
+                                        $sql = "SELECT * FROM `cart` WHERE Id_user = $iduser";
+                                        $query = mysqli_query($conn,$sql);
+                                        
+                               
+                             ?>
+                                    <span class="cart_zero"><?php echo mysqli_num_rows($query); ?></span>
                                 </a>
                                 <div class="cart_down_area">
+                                
+                                    <?php while ($row = mysqli_fetch_assoc($query)) { ?>
                                     <div class="cart_single">
-                                        <a href="#"><img src="images/img-products/quat-phun-suong-1.jpg" alt="" width="30%" /></a>
-                                        <h2><a href="#">Pelonic FS40</a></h2>
-                                        <p>299 $</p>
+                                        <a href="product.php?id_product=<?php echo $row['id_product']; ?>"><img src="<?php echo $row['image']; ?>" alt="" width="30%" /></a>
+                                        <h2 class="ellipsis"><a href="product.php?id_product=<?php echo $row['id_product']; ?>"><?php echo $row['name_product']; ?></a></h2>
+                                           <style type="text/css">
+                                                .ellipsis {
+                                                white-space: nowrap;
+                                                text-overflow: ellipsis;
+                                                overflow: hidden;
+                                                }
+                                            </style>
+                                        <p><?php echo $row['price']; ?></p>
                                     </div>
-                                    <div class="cart_single">
-                                        <a href="#"><img src="./images/product (3).jpg" alt="" width="30%" /></a>
-                                        <h2><a href="#">Royal Aura Fan S650</a></h2>
-                                        <p>1259 $</p>
-                                    </div>
+                            <?php  }
+                                    }else {
+                                        //show alert + điều hướng đến trang login
+                                        echo "<script language='javascript'>";
+                                        echo "alert('Please login...');";
+                                        echo "window.location='my-account.php';";
+                                        echo "</script>";
+                             } ?>
+        <!-- ------------------------END ----------------------- -->   
                                     <div class="cart_shoptings">
                                         <a href="checkout.php" class="cart_shoptings-link">Buy now</a>
                                     </div>
@@ -162,14 +195,14 @@
                                 <div class="mega_menu_list">
                                     <div class="single_megamenu">
                                         <div class="items_list">
-                                            <a href="product.php"><i class="fa fa-angle-right"></i> Ceiling Fans</a>
-                                            <a href="product1.php"><i class="fa fa-angle-right"></i> Tower Fans</a>
-                                            <a href="product2.php"><i class="fa fa-angle-right"></i> Misting Fans</a>
-                                            <a href="product3.php"><i class="fa fa-angle-right"></i> Steam Fans</a>
-                                            <a href="product4.php"><i class="fa fa-angle-right"></i> Stand Fans</a>
-                                            <a href="product5.php"><i class="fa fa-angle-right"></i> Wall Fans</a>
-                                            <a href="product6.php"><i class="fa fa-angle-right"></i> Box Fans</a>
-                                            <a href="product7.php"><i class="fa fa-angle-right"></i> Exhaust Fan</a>
+                                            <a href="shop.php"><i class="fa fa-angle-right"></i> Ceiling Fans</a>
+                                            <a href="shop.php"><i class="fa fa-angle-right"></i> Tower Fans</a>
+                                            <a href="shop.php"><i class="fa fa-angle-right"></i> Misting Fans</a>
+                                            <a href="shop.php"><i class="fa fa-angle-right"></i> Steam Fans</a>
+                                            <a href="shop.php"><i class="fa fa-angle-right"></i> Stand Fans</a>
+                                            <a href="shop.php"><i class="fa fa-angle-right"></i> Wall Fans</a>
+                                            <a href="shop.php"><i class="fa fa-angle-right"></i> Box Fans</a>
+                                            <a href="shop.php"><i class="fa fa-angle-right"></i> Exhaust Fan</a>
                                         </div>
                                     </div>
                                 </div>
