@@ -38,40 +38,40 @@
 	 
 	        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
 	            <div class="product_list">
-	                <div class="single_product" style="margin-top: 25px">
-	                    <a  ><img src="<?php echo $row['image']; ?>" alt="" width="100%" style="height: 250.58px" /></a>
-	                    <div class="product_details">
-	                        <h2 class="ellipsis"><?php echo $row['name']; ?></h2>  <!-- show name product -->
-	                        <p><span class="popular_price"><?php
-	                         echo number_format($row['price']); ?> VND  <!-- đổ price product -->
-	                     </span></p>
-	                     <style type="text/css">
-	                     	.ellipsis {
-							white-space: nowrap;
-							text-overflow: ellipsis;
-							overflow: hidden;
-							}
-	                     </style>
-	                    </div>
-	                    <div class="product_detail">
-	                        <div class="star_icon">
-	                            <i class="fa fa-star"></i>
-	                            <i class="fa fa-star"></i>
-	                            <i class="fa fa-star"></i>
-	                            <i class="fa fa-star"></i>
-	                            <i class="fa fa-star"></i>
-	                        </div>
-	                        <div class="product_button">
-	                            <div class="cart_details">
-	                                <a href="product.php?id_product=<?php echo $row['id_product'] ?>" ><i class="fas fa-shopping-cart"></i> Add to Cart </a>
-	                            </div>
-
-	                            <div class="cart_details">
-	                                <i class="far fa-heart"></i>
-	                            </div>
-	                        </div>
-	                    </div>
-	                </div>
-	            </div>
+                                            <div class="single_product repomsive_768" style="margin-top: 25px">
+                                                <a  ><img src="<?php echo $row['image'] ?>" alt="" /></a>
+                                                <div class="product_details">
+                                                    <h2 class="ellipsis"><?php echo $row['name']; ?></h2>
+                                                    <p><span class="popular_price"><?php echo (($row['price'])*0.00004); ?> $</span></p>
+                                                    <style type="text/css">
+                                                        .ellipsis {
+                                                        white-space: nowrap;
+                                                        text-overflow: ellipsis;
+                                                        overflow: hidden;
+                                                        padding-top: 10px;
+                                                        }
+                                                     </style>
+                                                </div>
+                                                
+                                            </div>
+                                            <div >
+                                                    <div class="star_icon">
+                                                        <i class="fa fa-star"></i>
+                                                        <i class="fa fa-star"></i>
+                                                        <i class="fa fa-star"></i>
+                                                        <i class="fa fa-star"></i>
+                                                        <i class="fa fa-star-half-o"></i>
+                                                    </div>
+                                                    <div class="product_button">
+                                                        <div class="cart_details">
+                                                            <a href="product.php?id_product=<?php echo $row['id_product'] ?>" ><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+                                                             <!-- <i class="far fa-heart"></i> -->
+                                                        </div>
+                                                        <div class="cart_details">
+                                                           
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </div>
 	        </div>
   <?php } }?>

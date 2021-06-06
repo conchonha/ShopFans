@@ -313,13 +313,21 @@
                                     <div class="clothing_item">
                                         <img src="<?php echo $row['image'] ?>" alt="" />
                                         <div class="product_clothing_details">
-                                            <h2><a href="product.php?id_product=<?php echo $row['id_product'] ?>"><?php echo $row['name']; ?></a></h2>
+                                            <h2 class="ellipsis"><a href="product.php?id_product=<?php echo $row['id_product'] ?>"><?php echo $row['name']; ?></a></h2>
+                                            <style type="text/css">
+                                                        .ellipsis {
+                                                        white-space: nowrap;
+                                                        text-overflow: ellipsis;
+                                                        overflow: hidden;
+                                                        
+                                                        }
+                                                     </style>
                                             <i class="fa fa-star"></i>
                                             <i class="fa fa-star"></i>
                                             <i class="fa fa-star"></i>
                                             <i class="fa fa-star"></i>
                                             <i class="fa fa-star"></i>
-                                            <p><?php echo number_format($row['price']); ?></p>
+                                            <p><?php echo (($row['price'])*0.00004)." $"; ?></p>
                                         </div>
                                     </div>
                                    <?php } ?>
@@ -481,7 +489,7 @@
                                     </div>
                                     <div class="pricing_rate">
                                         <div class="d-flex align-items-center">
-                                            <p class="rating_dollor rating_margin"><span class="rating_value_two"><?php echo number_format($row['price'])." VND"; ?></span></p>
+                                            <p class="rating_dollor rating_margin"><span class="rating_value_two"><?php echo (($row['price'])*0.00004)." $"; ?></span></p>
                                             <div class="product_blog_button d-flex">
                                                 <div class="cart_blog_details blog_icon_border">
                                                     <i class="far fa-heart"></i>
@@ -621,19 +629,19 @@
                                                     <h2>News</h2>
                                                     <div class="parameter_item d-flex align-items-center">
                                                         <img src="images/product (2).jpg" width="100%" alt="">
-                                                        <span>Cách bảo quản và vệ sinh máy quạt đúng cách</span>
+                                                        <span>How to properly maintain and clean the fan</span>
                                                     </div>
                                                     <div class="parameter_item d-flex align-items-center">
                                                         <img src="images/homepro2.png" width="100%" alt="">
-                                                        <span>Cách bảo quản và vệ sinh máy quạt đúng cách</span>
+                                                        <span>How to properly maintain and clean the fan</span>
                                                     </div>
                                                     <div class="parameter_item d-flex align-items-center">
                                                         <img src="images/homepro.png" width="100%" alt="">
-                                                        <span>Cách bảo quản và vệ sinh máy quạt đúng cách</span>
+                                                        <span>How to properly maintain and clean the fan</span>
                                                     </div>
                                                     <div class="parameter_item d-flex align-items-center">
                                                         <img src="images/homepro1.png" width="100%" alt="">
-                                                        <span>Cách bảo quản và vệ sinh máy quạt đúng cách</span>
+                                                        <span>How to properly maintain and clean the fan</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -773,7 +781,7 @@
                                                             <a href="#">10 Comment </a>
                                                         </div>
                                                     </div>
-                                                    <p><?php echo number_format($row['price']); ?> VND</p>
+                                                    <p><?php echo (($row['price'])*0.00004); ?> $</p>
                                                 </div>
                                             </div>
                                         </div>

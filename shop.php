@@ -372,16 +372,19 @@
                                                 <a  ><img src="<?php echo $row['image'] ?>" alt="" /></a>
                                                 <div class="product_details">
                                                     <h2 class="ellipsis"><?php echo $row['name']; ?></h2>
-                                                    <p><span class="popular_price"><?php echo number_format($row['price']); ?> VND</span></p>
+                                                    <p><span class="popular_price"><?php echo (($row['price'])*0.00004); ?> $</span></p>
                                                     <style type="text/css">
                                                         .ellipsis {
                                                         white-space: nowrap;
                                                         text-overflow: ellipsis;
                                                         overflow: hidden;
+                                                        padding-top: 10px;
                                                         }
                                                      </style>
                                                 </div>
-                                                <div class="product_detail">
+                                                
+                                            </div>
+                                            <div >
                                                     <div class="star_icon">
                                                         <i class="fa fa-star"></i>
                                                         <i class="fa fa-star"></i>
@@ -392,13 +395,13 @@
                                                     <div class="product_button">
                                                         <div class="cart_details">
                                                             <a href="product.php?id_product=<?php echo $row['id_product'] ?>" ><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+                                                             <!-- <i class="far fa-heart"></i> -->
                                                         </div>
                                                         <div class="cart_details">
-                                                            <i class="far fa-heart"></i>
+                                                           
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
                                         </div>
                                     </div>
                                 <?php } ?>

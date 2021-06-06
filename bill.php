@@ -1,5 +1,6 @@
 <?php session_start();
 include 'handling/utils/connect.php';
+$total = 0;
 //lấy tất cả văn bản / mã / đánh dấu tồn tại trong tệp được chỉ định và sao chép nó vào tệp sử dụng câu lệnh include. -->?>
 <!doctype html>
 <html class="no-js" lang="en">
@@ -127,50 +128,6 @@ include 'handling/utils/connect.php';
                         <ul id="account_nav">
                             <li><a href="my-account.php">Account <i class="fas fa-long-arrow-alt-right"></i></a>
                             </li>
-                            <li>
-                                <a href="cart.php">
-                                    <img src="images/cart.webp" width="25%" alt="">
-                                     <!-- ------------------------------------------CART----------------------------- -->
-                                    <?php 
-                            //kiểm tra xem người dùng đã đăng nhập trước đó chưa
-                                    if ($_SESSION["iduser"] != null) {
-                                        $iduser = $_SESSION["iduser"];
-                                        $sql = "SELECT * FROM `cart` WHERE Id_user = $iduser";
-                                        $query = mysqli_query($conn,$sql);
-                                        
-                               
-                             ?>
-                                    <span class="cart_zero"><?php echo mysqli_num_rows($query); ?></span>
-                                </a>
-                                <div class="cart_down_area">
-                                
-                                    <?php while ($row = mysqli_fetch_assoc($query)) { ?>
-                                    <div class="cart_single">
-                                        <a href="product.php?id_product=<?php echo $row['id_product']; ?>"><img src="<?php echo $row['image']; ?>" alt="" width="30%" /></a>
-                                        <h2 class="ellipsis"><a href="product.php?id_product=<?php echo $row['id_product']; ?>"><?php echo $row['name_product']; ?></a></h2>
-                                           <style type="text/css">
-                                                .ellipsis {
-                                                white-space: nowrap;
-                                                text-overflow: ellipsis;
-                                                overflow: hidden;
-                                                }
-                                            </style>
-                                        <p><?php echo $row['price']; ?></p>
-                                    </div>
-                            <?php  }
-                                    }else {
-                                        //show alert + điều hướng đến trang login
-                                        echo "<script language='javascript'>";
-                                        echo "alert('Please login...');";
-                                        echo "window.location='my-account.php';";
-                                        echo "</script>";
-                             } ?>
-        <!-- ------------------------END ----------------------- -->   
-                                    <div class="cart_shoptings">
-                                        <a href="checkout.php" class="cart_shoptings-link">Buy now</a>
-                                    </div>
-                                </div>
-                            </li>
                         </ul>
                     </div>
                     <!--End Header Right Cart area -->
@@ -226,87 +183,78 @@ include 'handling/utils/connect.php';
             </div>
         </div>
     </div>
-    <!--End Main Menu area -->
-    <div class="breadcrumbs-area">
+   
+ <div class="shopping_cart_area">
         <div class="container">
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="breadcrumb-single blog_top_area">
-                        <ul id="breadcrumbs">
-                            <li><a href="index.php"><i class="fa fa-home"></i> Home</a></li>
-                            <li><span>Ι</span></li>
-                            <li>Contact</li>
-                        </ul>
+                <div class="col-lg-12">
+                    <div class="text_cart">
+                        <h1>BILL </h1>
+                        <hr>
                     </div>
+                </div>
+                <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                    <div class="shopping-cart-table">
+                        <table class="cart_items">
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                            </tr>
+         <!-- ------------------------ ĐỔ DỮ LIỆU ODERS ----------------------- -->                    
+                            <?php 
+                            //kiểm tra xem người dùng đã đăng nhập trước đó chưa
+                                if(isset($_GET['id_purchase_schedule'])){
+                                    $id_purchase_schedule = $_GET['id_purchase_schedule'];
+                                    $sql = "SELECT * FROM `orders` WHERE id_purchase_schedule = $id_purchase_schedule";
+                                    $query = mysqli_query($conn,$sql);
+                                    while ($row = mysqli_fetch_assoc($query)) {
+                                         $total += $row['price']
+                             ?>
+                            <tr>
+                                <td>
+                                    <a href="product.php?id_product=<?php echo $row['id_product']; ?>"><img src="<?php echo $row['image'] ?>" alt="" width="40%" /></a>
+
+                                </td>
+                                <td>
+                                    <h4><?php echo $row['name']; ?>
+                                        <!-- <span>Category: Misting Fan</span> -->
+                                    </h4>
+                                </td>
+                                <td><?php echo (($row['price'])*0.00004); ?> $</td>
+                            </tr>
+                            <?php      }
+                                } ?>
+        <!-- ------------------------END ----------------------- -->
+                           <tfoot>
+                                                <tr>
+                                                    <th scope="row">Subtotal:</th>
+                                                    <td><span class="woocommerce-Price-amount amount"><?php echo $total*0.00004; ?> $<span class="woocommerce-Price-currencySymbol"></span></span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Shipping:</th>
+                                                    <td>Free delivery</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Payment methods:</th>
+                                                    <td>Cash on delivery</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">total:</th>
+                                                    <td><span class="woocommerce-Price-amount amount"><?php echo $total*0.00004; ?><span class="woocommerce-Price-currencySymbol"> $</span></span>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    
                 </div>
             </div>
         </div>
     </div>
-    <!--Start google map area -->
-    <div class="google_map_area">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d979.8300086219956!2d106.66602984243288!3d10.786782274061387!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752ed2392c44df%3A0xd2ecb62e0d050fe9!2sFPT-Aptech%20Computer%20Education%20HCM!5e0!3m2!1svi!2s!4v1602836728030!5m2!1svi!2s"
-                        width="100%" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--End google map area -->
-    <!--Start company details area -->
-    <div class="company_contact_details">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="get_touch">
-                        <h2>Stay in touch with us</h2>
-                        <p>
-                            Please enter information in the form. We will contact you as soon as possible.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-                    <div class="contact_us_info">
-                        <input type="text" placeholder="Tên *">
-                        <input type="text" placeholder="Email *">
-                        <input type="text" placeholder="Tiêu đề">
-                        <textarea placeholder="Nội dung *" rows="10" cols="30"></textarea>
-                        <div class="controls">
-                            <input type="submit" class="btn btn-large btn-primary submit" value="Xác nhận">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                    <div class="company_right_area">
-                        <h6>Information</h6>
-                        <div class="contact_addon_content">
-                            <p><span><i class="fa fa-map-marker"></i></span> FANoFAN company</p>
-                            <p><span><i class="fa fa-envelope"></i></span>fanfan@gmail.com</p>
-                            <p><span><i class="fa fa-phone"></i></span>0909.090.090</p>
-                        </div>
-                    </div>
-                    <div class="company_right_hour">
-                        <h6>Business hours</h6>
-                        <p>Monday &ndash; Friday: 9g to 20g <br> Saturday &dash; Sunday: 9am to 5pm </p>
-                        <div class="single_icons_contact">
-                            <ul class="footer_menu">
-                                <a href="https://www.facebook.com/" class="fab fa-facebook-f"></a>
-                                <a href="https://twitter.com/?lang=vi" class="fab fa-twitter"></a>
-                                <a href="https://www.google.com/" class="fab fa-google"></a>
-                                <a href="https://www.linkedin.com/" class="fab fa-linkedin"></a>
-
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!--End area -->
     <!--Start Footer area -->
     <div class="footer_area home1_margin_top">

@@ -1,6 +1,7 @@
 <?php 
 session_start();
-include 'handling/utils/connect.php'; 
+include 'handling/utils/connect.php';
+$total = 0; 
 ?>
 <!-- //lấy tất cả văn bản / mã / đánh dấu tồn tại trong tệp được chỉ định và sao chép nó vào tệp sử dụng câu lệnh include. -->
 <!doctype html>
@@ -100,7 +101,7 @@ include 'handling/utils/connect.php';
                                         $sql = "SELECT * FROM `cart` WHERE Id_user = $iduser";
                                         $query = mysqli_query($conn,$sql);
                                         while ($row = mysqli_fetch_assoc($query)) {
-                                           
+                                           $total += $row['price'];
                              ?>
                             <tr>
                                 <td>
@@ -112,7 +113,7 @@ include 'handling/utils/connect.php';
                                         <!-- <span>Category: Misting Fan</span> -->
                                     </h4>
                                 </td>
-                                <td><?php echo number_format($row['price']); ?> VND</td>
+                                <td><?php echo (($row['price'])*0.00004); ?> $</td>
                                 <td><input id="<?php echo $row['id_product']; ?>" name="cart[390][qty]" value="<?php echo $row['number']; ?>" size="4" title="Qty" type="number" min="1" class="input-text qty" maxlength="12"></td>
 
                                 <script type="text/javascript">
@@ -205,20 +206,24 @@ include 'handling/utils/connect.php';
                             </tr>
                             <tr rowspan="2">
                                 <td> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subtotal</td>
-                                <td> $ 1,588</td>
+                                <td> <?php echo ($total * 0.00004); ?> $</td>
                             </tr>
                             <tr>
                                 <td> Shipping</td>
-                                <td> $ 10.00</td>
+                                <td> 1.30174 $</td>
                             </tr>
                             <tr>
                                 <td> Tax</td>
-                                <td> $ 0.00</td>
+                                <td> 0 $</td>
                             </tr>
                             <tr>
                                 <td> Total</td>
-                                <td class="total_price"> $ 1,598</td>
+                                <td class="total_price"> <?php echo (($total - 30000) * 0.00004); ?> $</td>
                             </tr>
+                            <tr>
+                                <th colspan="2"><a href="handling/paycart_insert_purchase_schedule_insert_orders.php">Pay</a></th>
+                            </tr>
+                           
                         </table>
                     </div>
                 </div>

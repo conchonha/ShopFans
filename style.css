@@ -1118,7 +1118,7 @@ ul#nav_menu li div.home-page-3 {
     color: #FEB21F;
     text-align: center;
     padding-bottom: 10px;
-    margin-left: 60px;
+    margin-left: 10px;
 }
 
 .product_button {
@@ -1149,7 +1149,7 @@ ul#nav_menu li div.home-page-3 {
 }
 
 .single_product:hover .product_details {
-    opacity: 0;
+    /*opacity: 0;*/
 }
 
 .product_button a {
@@ -1182,7 +1182,7 @@ ul#nav_menu li div.home-page-3 {
 
 .cart_details {
     display: inline-block;
-    margin-right: 5px;
+    margin-right: 15px;
 }
 
 .cart_details:hover a[target="blank"] {
