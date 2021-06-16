@@ -13,7 +13,7 @@ $datagiohang=mysqli_query($conn,$sqlgiohang);
     //lấy ngày hiện tại
     $date = getdate();
     $ngayhientai=$date['year']."-".$date['mon']."-".$date['mday'];
-    $status="waiting for approval";
+    $status="0";
     
     // inser purchase_schedule
     $sql_purchase_schedule="INSERT INTO `purchase_schedule`(`booking_date`, `status`, `id_user`) VALUES ('$ngayhientai','$status','$iduser')";

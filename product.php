@@ -116,7 +116,7 @@
                     </form>
                     <!--End Search area -->
                 </div>
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 mb-3">
+                               <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 mb-3">
                     <!--Start Header Right Cart area -->
                     <div class="account_card_area">
                         <ul id="account_nav">
@@ -125,21 +125,44 @@
                             <li>
                                 <a href="cart.php">
                                     <img src="images/cart.webp" width="25%" alt="">
-                                    <span class="cart_zero">2</span>
+                        <!-- ------------------------------------------CART----------------------------- -->
+                            <?php 
+                            //kiểm tra xem người dùng đã đăng nhập trước đó chưa
+                                    if ($_SESSION["iduser"] != null) {
+                                        $iduser = $_SESSION["iduser"];
+                                        $sql = "SELECT * FROM `cart` WHERE Id_user = $iduser";
+                                        $query = mysqli_query($conn,$sql);
+                                       
+                                           
+                             ?>
+                                    <span class="cart_zero"><?php echo mysqli_num_rows($query); ?></span>
                                 </a>
                                 <div class="cart_down_area">
+              <?php  while ($row = mysqli_fetch_assoc($query)) { ?>
                                     <div class="cart_single">
-                                        <a href="#"><img src="images/img-products/quat-phun-suong-1.jpg" alt="" width="30%" /></a>
-                                        <h2><a href="#">Pelonic FS40</a></h2>
-                                        <p>299 $</p>
+                                        <a href="product.php?id_product=<?php echo $row['id_product']; ?>"><img src="<?php echo $row['image']; ?>" alt="" width="30%" /></a>
+                                        <h2 class="ellipsis"><a href="product.php?id_product=<?php echo $row['id_product']; ?>"><?php echo $row['name_product']; ?></a></h2>
+                                           <style type="text/css">
+                                                .ellipsis {
+                                                white-space: nowrap;
+                                                text-overflow: ellipsis;
+                                                overflow: hidden;
+                                                }
+                                            </style>
+                                        <p><?php echo ceil($row['price']*0.00004); ?> $</p>
                                     </div>
-                                    <div class="cart_single">
-                                        <a href="#"><img src="./images/product (3).jpg" alt="" width="30%" /></a>
-                                        <h2><a href="#">Royal Aura Fan S650</a></h2>
-                                        <p>1259 $</p>
-                                    </div>
+                            <?php  }
+                                    }else {
+                                        //show alert + điều hướng đến trang login
+                                        echo "<script language='javascript'>";
+                                        echo "alert('Please login...');";
+                                        echo "window.location='my-account.php';";
+                                        echo "</script>";
+                             } ?>
+        <!-- ------------------------END ----------------------- -->   
+                                
                                     <div class="cart_shoptings">
-                                        <a href="checkout.php" class="cart_shoptings-link">Buy now</a>
+                                        <a href="cart.php" class="cart_shoptings-link">Buy now</a>
                                     </div>
                                 </div>
                             </li>
@@ -147,8 +170,6 @@
                     </div>
                     <!--End Header Right Cart area -->
                 </div>
-            </div>
-        </div>
     </div>
     <!--End Header Top area -->
     <!--Start Main Menu area -->
@@ -327,7 +348,7 @@
                                             <i class="fa fa-star"></i>
                                             <i class="fa fa-star"></i>
                                             <i class="fa fa-star"></i>
-                                            <p><?php echo (($row['price'])*0.00004)." $"; ?></p>
+                                            <p><?php echo ceil((($row['price'])*0.00004))." $"; ?></p>
                                         </div>
                                     </div>
                                    <?php } ?>
@@ -489,13 +510,13 @@
                                     </div>
                                     <div class="pricing_rate">
                                         <div class="d-flex align-items-center">
-                                            <p class="rating_dollor rating_margin"><span class="rating_value_two"><?php echo (($row['price'])*0.00004)." $"; ?></span></p>
+                                            <p class="rating_dollor rating_margin"><span class="rating_value_two"><?php echo ceil((($row['price'])*0.00004))." $"; ?></span></p>
                                             <div class="product_blog_button d-flex">
                                                 <div class="cart_blog_details blog_icon_border">
                                                     <i class="far fa-heart"></i>
                                                 </div>
                                                 <div class="cart_blog_details blog_icon_border">
-                                                    <a href="#!" target="heart"><i class="fas fa-cart-plus"></i></a>
+                                                    <a href="product.php?buy_now=buy_now&id_product=<?php echo $idsp; ?>" target="heart"><i class="fas fa-cart-plus"></i></a>
                                                 </div>
                                                 <script>
                                                     var heart = document.querySelector('.cart_blog_details  .far')
@@ -781,7 +802,7 @@
                                                             <a href="#">10 Comment </a>
                                                         </div>
                                                     </div>
-                                                    <p><?php echo (($row['price'])*0.00004); ?> $</p>
+                                                    <p><?php echo ceil((($row['price'])*0.00004)); ?> $</p>
                                                 </div>
                                             </div>
                                         </div>

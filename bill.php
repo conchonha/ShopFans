@@ -221,7 +221,7 @@ $total = 0;
                                         <!-- <span>Category: Misting Fan</span> -->
                                     </h4>
                                 </td>
-                                <td><?php echo (($row['price'])*0.00004); ?> $</td>
+                                <td><?php echo ceil((($row['price'])*0.00004)); ?> $</td>
                             </tr>
                             <?php      }
                                 } ?>
@@ -229,7 +229,7 @@ $total = 0;
                            <tfoot>
                                                 <tr>
                                                     <th scope="row">Subtotal:</th>
-                                                    <td><span class="woocommerce-Price-amount amount"><?php echo $total*0.00004; ?> $<span class="woocommerce-Price-currencySymbol"></span></span>
+                                                    <td><span class="woocommerce-Price-amount amount"><?php echo ceil($total*0.00004); ?> $<span class="woocommerce-Price-currencySymbol"></span></span>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -242,7 +242,7 @@ $total = 0;
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">total:</th>
-                                                    <td><span class="woocommerce-Price-amount amount"><?php echo $total*0.00004; ?><span class="woocommerce-Price-currencySymbol"> $</span></span>
+                                                    <td><span class="woocommerce-Price-amount amount"><?php echo ceil($total*0.00004); ?><span class="woocommerce-Price-currencySymbol"> $</span></span>
                                                     </td>
                                                 </tr>
                                             </tfoot>

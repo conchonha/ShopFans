@@ -152,7 +152,7 @@ include 'handling/utils/connect.php'; ?>
                                                 overflow: hidden;
                                                 }
                                             </style>
-                                        <p><?php echo $row['price']; ?></p>
+                                        <p><?php echo ceil($row['price']*0.00004); ?> $</p>
                                     </div>
                             <?php  }
                                     }else {

@@ -92,7 +92,7 @@ include 'handling/utils/connect.php';
         </div>
     </div>
     <!--Start Header Top area -->
-    <div class="header_area_top">
+     <div class="header_area_top">
         <div class="container-fluid">
             <div class="row d-flex align-items-center">
                 <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12 text-center">
@@ -108,8 +108,8 @@ include 'handling/utils/connect.php';
                         <div class="search_box ">
                             <input id="abc" class="input_text" type="text" placeholder="Search" />
                             <button onclick="search()" type="submit" class="btn-search">
-									<span><i class="fa fa-search"></i></span>
-							</button>
+                                    <span><i class="fa fa-search"></i></span>
+                            </button>
                         </div>
                     <script type="text/javascript">
                             function search() {
@@ -130,21 +130,20 @@ include 'handling/utils/connect.php';
                             <li>
                                 <a href="cart.php">
                                     <img src="images/cart.webp" width="25%" alt="">
-                                     <!-- ------------------------------------------CART----------------------------- -->
-                                    <?php 
+                        <!-- ------------------------------------------CART----------------------------- -->
+                            <?php 
                             //kiểm tra xem người dùng đã đăng nhập trước đó chưa
                                     if ($_SESSION["iduser"] != null) {
                                         $iduser = $_SESSION["iduser"];
                                         $sql = "SELECT * FROM `cart` WHERE Id_user = $iduser";
                                         $query = mysqli_query($conn,$sql);
-                                        
-                               
+                                       
+                                           
                              ?>
                                     <span class="cart_zero"><?php echo mysqli_num_rows($query); ?></span>
                                 </a>
                                 <div class="cart_down_area">
-                                
-                                    <?php while ($row = mysqli_fetch_assoc($query)) { ?>
+              <?php  while ($row = mysqli_fetch_assoc($query)) { ?>
                                     <div class="cart_single">
                                         <a href="product.php?id_product=<?php echo $row['id_product']; ?>"><img src="<?php echo $row['image']; ?>" alt="" width="30%" /></a>
                                         <h2 class="ellipsis"><a href="product.php?id_product=<?php echo $row['id_product']; ?>"><?php echo $row['name_product']; ?></a></h2>
@@ -155,7 +154,7 @@ include 'handling/utils/connect.php';
                                                 overflow: hidden;
                                                 }
                                             </style>
-                                        <p><?php echo $row['price']; ?></p>
+                                        <p><?php echo ceil($row['price']*0.00004); ?> $</p>
                                     </div>
                             <?php  }
                                     }else {
@@ -166,8 +165,9 @@ include 'handling/utils/connect.php';
                                         echo "</script>";
                              } ?>
         <!-- ------------------------END ----------------------- -->   
+                                
                                     <div class="cart_shoptings">
-                                        <a href="checkout.php" class="cart_shoptings-link">Buy now</a>
+                                        <a href="cart.php" class="cart_shoptings-link">Buy now</a>
                                     </div>
                                 </div>
                             </li>
@@ -271,12 +271,12 @@ include 'handling/utils/connect.php';
             <div class="row">
                 <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
                     <div class="contact_us_info">
-                        <input type="text" placeholder="Tên *">
+                        <input type="text" placeholder="Name">
                         <input type="text" placeholder="Email *">
-                        <input type="text" placeholder="Tiêu đề">
-                        <textarea placeholder="Nội dung *" rows="10" cols="30"></textarea>
+                        <input type="text" placeholder="Title">
+                        <textarea placeholder="Content *" rows="10" cols="30"></textarea>
                         <div class="controls">
-                            <input type="submit" class="btn btn-large btn-primary submit" value="Xác nhận">
+                            <input type="submit" class="btn btn-large btn-primary submit" value="Confirm">
                         </div>
                     </div>
                 </div>
