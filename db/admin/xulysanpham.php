@@ -12,10 +12,10 @@
 		$mota = $_POST['mota'];
 		$path = '../../uploads/';
 		
-		$image = $path.$hinhanh;
+		$image = "https://localhost/WebBanQuat/uploads/".$hinhanh;
 		$hinhanh_tmp = $_FILES['hinhanh']['tmp_name'];
 		
-		$sql_insert_product = mysqli_query($con,"INSERT INTO product(name,description,price,total_number,image,id_category) values ('$tensanpham','$mota','$gia','$soluong','$image','$danhmuc')");
+		$sql_insert_product = mysqli_query($con,"INSERT INTO product(name,description,price,total_number,image,id_category,array_image_description) values ('$tensanpham','$mota','$gia','$soluong','$image','$danhmuc','$image')");
 		move_uploaded_file($hinhanh_tmp,$path.$hinhanh);
 	}elseif(isset($_POST['capnhatsanpham'])) {
 		$id_update = $_POST['id_update'];
